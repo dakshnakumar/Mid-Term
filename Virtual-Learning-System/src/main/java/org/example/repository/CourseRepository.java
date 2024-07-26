@@ -8,6 +8,6 @@ public interface CourseRepository {
 
     Boolean loggedIn(String email , String password);
      List<Course> display(int limit);
-    public List<Course> searchCourse(String courseName);
-
+     List<Course> searchCourse(String courseName);
+     Boolean signUp(String name , String gmail , String password);
 }

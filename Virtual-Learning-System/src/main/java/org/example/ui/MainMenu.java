@@ -3,6 +3,7 @@ package org.example.ui;
 import org.example.model.Course;
 import org.example.service.CourseServiceImpl;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,12 +22,13 @@ public class MainMenu {
     }
 
     public void login(){
-        System.out.println("Enter the mail ID");
-        String email = input.nextLine();
-        System.out.println("Enter password");
-        String password = input.nextLine();
 
-        Boolean isPresent = courseServiceImpl.logIn(email,password);
+            System.out.println("Enter the mail ID");
+            String email = input.nextLine();
+            System.out.println("Enter password");
+            String password = input.nextLine();
+
+            Boolean isPresent = courseServiceImpl.logIn(email, password);
         if(isPresent){
             System.out.println("Sucessfully loggedIn");
             System.out.println("---------------********-----------------");
@@ -58,18 +60,28 @@ public class MainMenu {
                     break;
 
                 case 3:
-                    System.out.println("Enter the course you want to enter in the cart");
+                    System.out.println("Enter the course Name");
                     String courseName = input.nextLine();
-                    boolean isAdded = courseServiceImpl.addToCart(courseName);
+                    System.out.println("Enter the author Name");
+                    String author = input.nextLine();
+                    System.out.println("Enter the course duration");
+                    String duration = input.nextLine();
+                    Course course1 = new Course(courseName,author,duration);
+                    Boolean isAdded = courseServiceImpl.addToCart(course1);
                     if(isAdded){
                         System.out.println("Successfully added to the cart");
                     } else System.out.println("course is not added to the cart");
                     break;
 
                 case 4:
-                    System.out.println("Enter the course name you want to delete in the cart");
+                    System.out.println("Enter the course Name");
                     String courseNameToDelete = input.nextLine();
-                    boolean isDeleted = courseServiceImpl.deleteFromCart(courseNameToDelete);
+                    System.out.println("Enter the author Name");
+                    String authorNameTodelete = input.nextLine();
+                    System.out.println("Enter the course duration");
+                    String durationToDelete = input.nextLine();
+                    Course course2 = new Course(courseNameToDelete,authorNameTodelete,durationToDelete);
+                    boolean isDeleted = courseServiceImpl.deleteFromCart(course2);
                     if(isDeleted){
                         System.out.println("successfully deleted from cart");
                     } else System.out.println("not deleted from cart");
@@ -85,9 +97,20 @@ public class MainMenu {
     }
 
     public void signUp(){
-        System.out.println("Enter the mail ID to register");
-        String email = input.nextLine();
-        System.out.println("Enter password to register");
-        String password = input.nextLine();
+        try {
+            System.out.println("Enter name ");
+            String name = input.nextLine();
+            System.out.println("Enter the mail ID to register");
+            String email = input.nextLine();
+            System.out.println("Enter password to register");
+            String password = input.nextLine();
+
+            if (courseServiceImpl.signUp(name, email, password)) {
+                System.out.println("Successfully saved");
+            } else System.out.println("not added to database");
+
+        }catch (InputMismatchException e){
+            System.out.println(e.getMessage());
+        }
     }
 }

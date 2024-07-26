@@ -23,11 +23,9 @@ public class CourseRepositoryImpl implements CourseRepository{
     // business logic to validate user
     public Boolean validateUser(String email , String password){
         try{
-
             Statement statement = databaseConnection.getConnection();
             String sql = "SELECT * FROM login where gmail='" + email + "';";
             ResultSet resultSet = statement.executeQuery(sql);
-
             while(resultSet.next()) {
                 String gmail = resultSet.getString("gmail");
                 String pass = resultSet.getString("password");
@@ -40,6 +38,19 @@ public class CourseRepositoryImpl implements CourseRepository{
         }
         return false;
     }
+
+    public Boolean signUp(String name , String email , String password){
+        try{
+            Statement statement = databaseConnection.getConnection();
+            String sql = "INSERT into login (name,gmail,password) VALUES('"+name+"','"+email+"','"+password+"');";
+            int affectedRows = statement.executeUpdate(sql);
+            return affectedRows >0;
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
 
     //to search course in the db
     public List<Course> searchCourse(String courseName){
