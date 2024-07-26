@@ -7,36 +7,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-public class CourseRepositoryImpl {
+
+public class CourseRepositoryImpl implements CourseRepository{
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
-//    Map<String,String> logInDetailsFromDb = new HashMap<>();
 
+// using validateUser method to validate the user , since in interface only loggedIn is mentioned.
+    public Boolean loggedIn(String email , String password){
+        return validateUser(email , password);
+    }
+
+    // business logic to validate user
     public Boolean validateUser(String email , String password){
         try{
-            String gmail;
-            String pass;
+
             Statement statement = databaseConnection.getConnection();
             String sql = "SELECT * FROM login where gmail='" + email + "';";
             ResultSet resultSet = statement.executeQuery(sql);
+
             while(resultSet.next()) {
-                gmail = resultSet.getString("gmail");
-                pass = resultSet.getString("password");
+                String gmail = resultSet.getString("gmail");
+                String pass = resultSet.getString("password");
                 if (gmail.equals(email)) {
-                    if (pass.equals(password)) {
-                        return true;
-                    } else return false;
+                    return pass.equals(password);
                 } else return false;
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;
+        return false;
     }
+
+    //to search course in the db
+    public List<Course> searchCourse(String courseName){
+        return searchCourseInDb(courseName);
+    }
+
 
     public List<Course> searchCourseInDb(String courseName){
         try{
@@ -45,16 +54,16 @@ public class CourseRepositoryImpl {
             String sql = "SELECT * FROM course where courseName='" + courseName + "';";
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
-                String CourseName = resultSet.getString("CourseName");
+                String courseNameFromDb = resultSet.getString("CourseName");
                 String author = resultSet.getString("authorName");
                 String duration = resultSet.getString("duration");
-                courses.add(new Course(CourseName,author,duration));
+                courses.add(new Course(courseNameFromDb,author,duration));
             }
             return courses;
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public List<Course> display(int limit){
@@ -64,15 +73,15 @@ public class CourseRepositoryImpl {
             String sql = "SELECT * FROM course limit='" + limit + "';";
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
-                String CourseName = resultSet.getString("CourseName");
+                String courseName = resultSet.getString("CourseName");
                 String author = resultSet.getString("authorName");
                 String duration = resultSet.getString("duration");
-                courses.add(new Course(CourseName,author,duration));
+                courses.add(new Course(courseName,author,duration));
             }
             return courses;
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 }

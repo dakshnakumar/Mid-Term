@@ -60,7 +60,7 @@ public class MainMenu {
                 case 3:
                     System.out.println("Enter the course you want to enter in the cart");
                     String courseName = input.nextLine();
-                    boolean isAdded = courseServiceImpl.AddToCart(courseName);
+                    boolean isAdded = courseServiceImpl.addToCart(courseName);
                     if(isAdded){
                         System.out.println("Successfully added to the cart");
                     } else System.out.println("course is not added to the cart");
@@ -69,12 +69,15 @@ public class MainMenu {
                 case 4:
                     System.out.println("Enter the course name you want to delete in the cart");
                     String courseNameToDelete = input.nextLine();
-                    boolean isDeleted = courseServiceImpl.DeleteFromCart(courseNameToDelete);
+                    boolean isDeleted = courseServiceImpl.deleteFromCart(courseNameToDelete);
                     if(isDeleted){
                         System.out.println("successfully deleted from cart");
                     } else System.out.println("not deleted from cart");
                     break;
 
+                 default:
+                    System.out.println("please enter valid input");
+                    break;
 //                case 5:
 //                    System.out.println("Which course you want to enroll");
             }

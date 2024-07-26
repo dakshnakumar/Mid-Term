@@ -1,35 +1,40 @@
 package org.example.service;
 
 import org.example.model.Course;
+import org.example.repository.CourseRepository;
 import org.example.repository.CourseRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseServiceImpl {
-    CourseRepositoryImpl courseRepositoryImpl = new CourseRepositoryImpl();
+public class CourseServiceImpl implements CourseService{
+    CourseRepository courseRepositoryImpl = new CourseRepositoryImpl();
     List<String> courses = new ArrayList<>();
 
+
     public Boolean logIn(String email , String password){
-        Boolean isPresent = courseRepositoryImpl.validateUser(email,password);
-        return isPresent;
+        return courseRepositoryImpl.loggedIn(email,password);
     }
 
     public List<Course> searchCourse(String courseName){
-        return courseRepositoryImpl.searchCourseInDb(courseName);
+        return courseRepositoryImpl.searchCourse(courseName);
     }
 
     public List<Course> display(int limit){
-        List<Course> courses = courseRepositoryImpl.display(limit);
-        return courses;
+        return courseRepositoryImpl.display(limit);
     }
 
-    public boolean AddToCart(String course){
+    public void displayCart(){
+        for (String c:courses){
+            System.out.println(c);
+        }
+    }
+    public boolean addToCart(String course){
         courses.add(course);
         return true;
     }
 
-    public boolean DeleteFromCart(String courseNameToDelete){
+    public boolean deleteFromCart(String courseNameToDelete){
         courses.remove(courseNameToDelete);
         return true;
     }
